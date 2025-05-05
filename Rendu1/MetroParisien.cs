@@ -11,7 +11,9 @@ namespace Rendu1
         public Graphe<Station> GrapheMetro { get; private set; }
         public Dictionary<string, Noeud<Station>> StationsParNom { get; private set; }
         
-        // Répertoire pour les visualisations
+        /// <summary>
+        /// Répertoire pour les visualisations
+        /// </summary>
         private readonly string dossierVisualisations = "Visualisations";
         
         public MetroParisien(string cheminFichier)
@@ -20,13 +22,13 @@ namespace Rendu1
             StationsParNom = new Dictionary<string, Noeud<Station>>();
             ChargerDonnees(cheminFichier);
             
-            // Créer le répertoire des visualisations s'il n'existe pas
+            /// Créer le répertoire des visualisations s'il n'existe pas
             if (!Directory.Exists(dossierVisualisations))
             {
                 Directory.CreateDirectory(dossierVisualisations);
             }
             
-            // Générer une visualisation du graphe complet
+            /// Générer une visualisation du graphe complet
             VisualiserGraphe();
         }
         
@@ -42,10 +44,10 @@ namespace Rendu1
             Dictionary<string, List<string>> connexions = new Dictionary<string, List<string>>();
             Dictionary<string, List<int>> changements = new Dictionary<string, List<int>>();
             
-            // Première lecture: créer toutes les stations
+            /// Première lecture: créer toutes les stations
             string[] lignes = File.ReadAllLines(cheminFichier);
             
-            // Ignorer la première ligne (en-têtes)
+            /// Ignorer la première ligne (en-têtes)
             for (int i = 1; i < lignes.Length; i++)
             {
                 string ligne = lignes[i];
@@ -53,14 +55,14 @@ namespace Rendu1
                 
                 if (champs.Length < 6) continue;
                 
-                // Utiliser le nom de ligne complet
+                /// Utiliser le nom de ligne complet
                 string nomLigneComplet = champs[0];
                 int numeroLigne;
                 
-                // Extraire le numéro principal de la ligne pour les comparaisons
+                /// Extraire le numéro principal de la ligne pour les comparaisons
                 if (!int.TryParse(nomLigneComplet, out numeroLigne))
                 {
-                    // Extraire les chiffres du début de la chaîne
+                    /// Extraire les chiffres du début de la chaîne
                     string chiffres = new string(nomLigneComplet.TakeWhile(char.IsDigit).ToArray());
                     if (!int.TryParse(chiffres, out numeroLigne))
                     {
@@ -75,37 +77,37 @@ namespace Rendu1
                 string stationSuivante = champs[4];
                 string changementsStr = champs[5];
                 
-                // Clé unique pour la station: ligne_nom
+                /// Clé unique pour la station: ligne_nom
                 string cleStation = $"{nomLigneComplet}_{nomStation}";
                 
-                // Créer la station si elle n'existe pas déjà
+                /// Créer la station si elle n'existe pas déjà
                 if (!stations.ContainsKey(cleStation))
                 {
                     Station station = new Station(numeroLigne, nomLigneComplet, nomStation, coordonnees, stationPrecedente, stationSuivante, changementsStr);
                     stations[cleStation] = station;
                     
-                    // Ajouter la station au graphe
+                    /// Ajouter la station au graphe
                     GrapheMetro.AjouterNoeud(station);
                     
-                    // Garder une référence au noeud
+                    /// Garder une référence au noeud
                     var noeud = GrapheMetro.Noeuds.LastOrDefault();
                     if (noeud != null) 
                     {
-                        // Stocker la référence au noeud par son nom de station pour faciliter la recherche
+                        /// Stocker la référence au noeud par son nom de station pour faciliter la recherche
                         if (!StationsParNom.ContainsKey(nomStation))
                         {
                             StationsParNom[nomStation] = noeud;
                         }
                     }
                     
-                    // Enregistrer les connexions pour les traiter plus tard
+                    /// Enregistrer les connexions pour les traiter plus tard
                     connexions[cleStation] = new List<string>();
                     if (!string.IsNullOrEmpty(stationPrecedente))
                         connexions[cleStation].Add($"{nomLigneComplet}_{stationPrecedente}");
                     if (!string.IsNullOrEmpty(stationSuivante))
                         connexions[cleStation].Add($"{nomLigneComplet}_{stationSuivante}");
                     
-                    // Enregistrer les changements de ligne
+                    /// Enregistrer les changements de ligne
                     List<int> changementsLignes = new List<int>();
                     if (!string.IsNullOrEmpty(changementsStr))
                     {
@@ -120,7 +122,7 @@ namespace Rendu1
                 }
             }
             
-            // Deuxième lecture: créer les liens entre les stations
+            /// Deuxième lecture: créer les liens entre les stations
             foreach (var kvp in connexions)
             {
                 string stationCle = kvp.Key;
@@ -144,21 +146,21 @@ namespace Rendu1
                         ((Station)n.Donnees).Nom == stationDestination.Nom
                     ) + 1; // +1 car les IDs commencent à 1
                     
-                    // Temps de parcours entre stations (2 minutes par défaut)
+                    /// Temps de parcours entre stations (2 minutes par défaut)
                     double tempsParcours = GrapheMetro.TempsEntreStations;
                     
-                    // Ajouter le lien (orienté)
+                    /// Ajouter le lien (orienté)
                     GrapheMetro.AjouterLien(idSource, idDestination, tempsParcours);
                 }
                 
-                // Ajouter les liens de correspondance
+                /// Ajouter les liens de correspondance
                 if (changements.ContainsKey(stationCle))
                 {
                     List<int> lignesCorrespondance = changements[stationCle];
                     
                     foreach (int ligneCorrespondance in lignesCorrespondance)
                     {
-                        // Trouver toutes les stations de la ligne de correspondance avec le même nom
+                        /// Trouver toutes les stations de la ligne de correspondance avec le même nom
                         var stationsCorrespondance = stations.Values
                             .Where(s => s.Ligne == ligneCorrespondance && s.Nom == stationSource.Nom)
                             .ToList();
@@ -172,7 +174,7 @@ namespace Rendu1
                             
                             if (idSource != idCorrespondance)
                             {
-                                // Ajouter un lien bidirectionnel pour les correspondances
+                                /// Ajouter un lien bidirectionnel pour les correspondances
                                 GrapheMetro.AjouterLien(idSource, idCorrespondance, GrapheMetro.TempsChangementLigne);
                                 GrapheMetro.AjouterLien(idCorrespondance, idSource, GrapheMetro.TempsChangementLigne);
                             }
@@ -205,7 +207,7 @@ namespace Rendu1
             Console.WriteLine("===========================================================");
             Console.ForegroundColor = ConsoleColor.White;
 
-            // Dijkstra
+            /// Dijkstra
             var sw = Stopwatch.StartNew();
             var (cheminDijkstra, tempsDijkstra) = GrapheMetro.Dijkstra(noeudDepart.Id, noeudArrivee.Id);
             sw.Stop();
@@ -216,7 +218,7 @@ namespace Rendu1
             Console.ForegroundColor = ConsoleColor.White;
             GrapheMetro.AfficherChemin(cheminDijkstra, tempsDijkstra);
 
-            // Bellman-Ford
+            /// Bellman-Ford
             sw.Restart();
             var (cheminBellman, tempsBellman) = GrapheMetro.BellmanFord(noeudDepart.Id, noeudArrivee.Id);
             sw.Stop();
@@ -227,7 +229,7 @@ namespace Rendu1
             Console.ForegroundColor = ConsoleColor.White;
             GrapheMetro.AfficherChemin(cheminBellman, tempsBellman);
 
-            // Floyd-Warshall
+            /// Floyd-Warshall
             sw.Restart();
             var (distances, successeurs) = GrapheMetro.FloydWarshall();
             var (cheminFloyd, tempsFloyd) = GrapheMetro.ReconstruireChemin(noeudDepart.Id, noeudArrivee.Id, distances, successeurs);
@@ -239,7 +241,7 @@ namespace Rendu1
             Console.ForegroundColor = ConsoleColor.White;
             GrapheMetro.AfficherChemin(cheminFloyd, tempsFloyd);
 
-            // Comparaison des résultats
+            /// Comparaison des résultats
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\nComparaison des résultats :");
             Console.WriteLine("==========================");
@@ -248,7 +250,7 @@ namespace Rendu1
             Console.WriteLine($"Bellman-Ford : {tempsBellman} minutes");
             Console.WriteLine($"Floyd-Warshall : {tempsFloyd} minutes");
 
-            // Génération des visualisations
+            /// Génération des visualisations
             GenererVisualisations(cheminDijkstra, cheminBellman, cheminFloyd, stationDepart, stationArrivee);
         }
         
@@ -282,7 +284,7 @@ namespace Rendu1
             {
                 var visualisation = new MetroVisualisation(GrapheMetro);
                 
-                // Normaliser les noms de stations pour éviter les problèmes avec les caractères spéciaux dans les noms de fichiers
+                /// Normaliser les noms de stations pour éviter les problèmes avec les caractères spéciaux dans les noms de fichiers
                 string nomFichierSanitise = $"itineraire_{algorithme}_{SanitiserNomFichier(stationDepart)}_{SanitiserNomFichier(stationArrivee)}.png";
                 string cheminFichier = Path.Combine(dossierVisualisations, nomFichierSanitise);
                 
@@ -299,7 +301,7 @@ namespace Rendu1
         /// </summary>
         private string SanitiserNomFichier(string nom)
         {
-            // Remplacer les caractères non valides pour un nom de fichier
+            /// Remplacer les caractères non valides pour un nom de fichier
             char[] caracteresInterdits = Path.GetInvalidFileNameChars();
             string nomSanitise = string.Join("_", nom.Split(caracteresInterdits, StringSplitOptions.RemoveEmptyEntries))
                 .Replace(" ", "_")
@@ -315,14 +317,14 @@ namespace Rendu1
         /// </summary>
         private void GenererVisualisations(List<int> cheminDijkstra, List<int> cheminBellman, List<int> cheminFloyd, string stationDepart, string stationArrivee)
         {
-            // Créer le dossier Visualisations s'il n'existe pas
+            /// Créer le dossier Visualisations s'il n'existe pas
             string dossierVisualisations = "Visualisations";
             if (!Directory.Exists(dossierVisualisations))
             {
                 Directory.CreateDirectory(dossierVisualisations);
             }
 
-            // Générer les visualisations pour chaque algorithme
+            ///  Générer les visualisations pour chaque algorithme
             VisualiserItineraire(cheminDijkstra, stationDepart, stationArrivee, "Dijkstra");
             VisualiserItineraire(cheminBellman, stationDepart, stationArrivee, "BellmanFord");
             VisualiserItineraire(cheminFloyd, stationDepart, stationArrivee, "FloydWarshall");

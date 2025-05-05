@@ -6,6 +6,9 @@ using Rendu1.Modules;
 
 namespace Rendu1
 {
+    /// <summary>
+    /// Programme principal pour l'app Liv'in Paris
+    /// </summary>
     class Program
     {
         // Couleurs pour la console
@@ -16,6 +19,9 @@ namespace Rendu1
         private static readonly ConsoleColor CouleurSucces = ConsoleColor.Green;
         private static readonly ConsoleColor CouleurInfo = ConsoleColor.Blue;
 
+        /// <summary>
+        /// Point d'entrée principal de l'application
+        /// </summary>
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -31,27 +37,29 @@ namespace Rendu1
                 return;
             }
 
-            // Chargement des données du métro parisien
+            /// Chargement des données du métro parisien
             string cheminBase = AppDomain.CurrentDomain.BaseDirectory;
             string cheminFichierMetro = Path.Combine(cheminBase, "DataMetro", "metro.csv");
             var metroParisien = new MetroParisien(cheminFichierMetro);
 
-            // Initialisation des modules
+            /// Initialisation des modules
             var moduleAuth = new AuthModule(db);
             var moduleClient = new ClientModule(db);
             var moduleCuisinier = new CuisinierModule(db);
-            var moduleCommande = new CommandeModule(db, metroParisien, moduleClient);
+            var moduleFidelisation = new FidelisationModule(db);
+            var moduleCommande = new CommandeModule(db, metroParisien, moduleClient, moduleFidelisation);
+        
             var moduleStatistiques = new StatistiquesModule(db);
             var moduleGraphe = new ColorationGraphe(db);
 
             while (true)
             {
-                // Afficher le menu de connexion
+                /// Afficher le menu de connexion
                 var session = moduleAuth.AfficherMenuConnexion();
                 if (session == null)
                     break;
 
-                // Gérer la session selon le type d'utilisateur
+                /// Gérer la session selon le type d'utilisateur
                 switch (session.Type)
                 {
                     case AuthModule.UserType.Admin:
@@ -66,11 +74,14 @@ namespace Rendu1
                 }
             }
 
-            // Déconnexion de la base de données
+            /// Déconnexion de la base de données
             db.Disconnect();
             Console.WriteLine("\nMerci d'avoir utilisé Liv'in Paris !");
         }
 
+        /// <summary>
+        /// Gestion de la session pour l'administrateur
+        /// </summary>
         static void GererSessionAdmin(ClientModule moduleClient, CuisinierModule moduleCuisinier, 
             CommandeModule moduleCommande, StatistiquesModule moduleStatistiques, MetroParisien metroParisien, ColorationGraphe moduleGraphe)
         {
@@ -121,6 +132,9 @@ namespace Rendu1
             }
         }
 
+        /// <summary>
+        /// Gestion de la session pour le client
+        /// </summary>
         static void GererSessionClient(AuthModule.UserSession session, CommandeModule moduleCommande)
         {
             bool continuer = true;
@@ -154,6 +168,9 @@ namespace Rendu1
             }
         }
 
+        /// <summary>
+        /// Gestion de la session pour le cuisinier
+        /// </summary>
         static void GererSessionCuisinier(AuthModule.UserSession session, CommandeModule moduleCommande)
         {
             bool continuer = true;
@@ -191,9 +208,12 @@ namespace Rendu1
             }
         }
 
+        /// <summary>
+        /// Gestion des itinéraires
+        /// </summary>
         static void GestionItineraires(MetroParisien metroParisien)
         {
-            // Vérifier si le fichier de données existe
+            /// Vérifier si le fichier de données existe
             string cheminBase = AppDomain.CurrentDomain.BaseDirectory;
             string cheminFichierMetro = Path.Combine(cheminBase, "DataMetro", "metro.csv");
             
@@ -209,7 +229,7 @@ namespace Rendu1
             bool continuer = true;
             while (continuer)
             {
-                // Recherche d'itinéraire
+                /// Recherche d'itinéraire
                 if (RechercherItinerairePersonnalisé(metroParisien) == false)
                 {
                     continuer = false;
@@ -234,22 +254,21 @@ namespace Rendu1
         /// <summary>
         /// Permet à l'utilisateur de rechercher un itinéraire personnalisé
         /// </summary>
-        /// <returns>true pour continuer, false pour quitter</returns>
         static bool RechercherItinerairePersonnalisé(MetroParisien metroParisien)
         {
             AfficherSousTitre("RECHERCHE D'ITINÉRAIRE PERSONNALISÉ");
             
-            // Sélection de la station de départ
+            /// Sélection de la station de départ
             string stationDepart = SélectionnerStation(metroParisien, "départ");
             if (string.IsNullOrEmpty(stationDepart))
                 return false;
             
-            // Sélection de la station d'arrivée
+            /// Sélection de la station d'arrivée
             string stationArrivee = SélectionnerStation(metroParisien, "arrivée");
             if (string.IsNullOrEmpty(stationArrivee))
                 return false;
             
-            // Éviter de rechercher un trajet vers la même station
+            /// Éviter de rechercher un trajet vers la même station
             if (stationDepart == stationArrivee)
             {
                 AfficherErreur("\nLes stations de départ et d'arrivée sont identiques.");
@@ -269,9 +288,7 @@ namespace Rendu1
         /// <summary>
         /// Permet à l'utilisateur de sélectionner une station existante
         /// </summary>
-        /// <param name="metroParisien">Le système métro</param>
-        /// <param name="type">Le type de station (départ ou arrivée)</param>
-        /// <returns>Le nom de la station sélectionnée ou null si l'utilisateur annule</returns>
+        
         static string SélectionnerStation(MetroParisien metroParisien, string type)
         {
             while (true)
@@ -288,7 +305,7 @@ namespace Rendu1
                     continue;
                 }
 
-                // Rechercher toutes les stations qui contiennent la chaîne de recherche (insensible à la casse)
+                /// Rechercher toutes les stations qui contiennent la chaîne de recherche (insensible à la casse)
                 var correspondances = metroParisien.StationsParNom.Keys
                     .Where(nom => nom.IndexOf(recherche, StringComparison.OrdinalIgnoreCase) >= 0)
                     .OrderBy(nom => nom)
@@ -308,10 +325,10 @@ namespace Rendu1
                     return stationExacte;
                 }
                 
-                // Afficher les résultats de la recherche
+                /// Afficher les résultats de la recherche
                 AfficherTexte($"\n{correspondances.Count} stations trouvées pour '{recherche}':");
                 
-                // Limiter l'affichage à 15 résultats maximum
+                /// Limiter l'affichage à 15 résultats maximum
                 int maxResultats = Math.Min(15, correspondances.Count);
                 for (int i = 0; i < maxResultats; i++)
                 {
@@ -366,6 +383,9 @@ namespace Rendu1
             Console.ForegroundColor = CouleurTexte;
         }
 
+        /// <summary>
+        /// Affiche un sous titre
+        /// </summary>
         private static void AfficherSousTitre(string sousTitre)
         {
             Console.ForegroundColor = CouleurSousTitre;
@@ -375,6 +395,9 @@ namespace Rendu1
             Console.ForegroundColor = CouleurTexte;
         }
 
+        /// <summary>
+        /// Affiche un séparateur
+        /// </summary>
         private static void AfficherSeparateur()
         {
             Console.ForegroundColor = CouleurInfo;
@@ -382,12 +405,18 @@ namespace Rendu1
             Console.ForegroundColor = CouleurTexte;
         }
 
+        /// <summary>
+        /// Affiche un texte
+        /// </summary>
         private static void AfficherTexte(string texte)
         {
             Console.ForegroundColor = CouleurTexte;
             Console.WriteLine(texte);
         }
 
+        /// <summary>
+        /// Affiche un message d'erreur
+        /// </summary>
         private static void AfficherErreur(string message)
         {
             Console.ForegroundColor = CouleurErreur;
@@ -395,6 +424,9 @@ namespace Rendu1
             Console.ForegroundColor = CouleurTexte;
         }
 
+        /// <summary>
+        /// Affiche un message de succès
+        /// </summary>
         private static void AfficherSucces(string message)
         {
             Console.ForegroundColor = CouleurSucces;

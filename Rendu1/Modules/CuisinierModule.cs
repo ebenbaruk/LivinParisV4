@@ -6,6 +6,9 @@ using MySql.Data.MySqlClient;
 
 namespace Rendu1.Modules
 {
+    /// <summary>
+    /// Module pour la gestion des cuisiniers, permettant d'ajouter, modifier, supprimer, afficher les clients servis, les plats par fréquence, gérer le plat du jour...
+    /// </summary>
     public class CuisinierModule
     {
         private readonly DatabaseManager _db;
@@ -15,6 +18,9 @@ namespace Rendu1.Modules
             _db = db;
         }
 
+        /// <summary>
+        /// Affiche le menu des cuisiniers
+        /// </summary>
         public void AfficherMenuCuisinier()
         {
             bool continuer = true;
@@ -24,9 +30,13 @@ namespace Rendu1.Modules
                 Console.WriteLine("=== MENU CUISINIER ===");
                 Console.WriteLine("1. Ajouter un nouveau cuisinier");
                 Console.WriteLine("2. Modifier un cuisinier");
+
                 Console.WriteLine("3. Supprimer un cuisinier");
                 Console.WriteLine("4. Afficher les clients servis");
+
+
                 Console.WriteLine("5. Afficher les plats par fréquence");
+
                 Console.WriteLine("6. Gérer le plat du jour");
                 Console.WriteLine("7. Importer des cuisiniers depuis un fichier");
                 Console.WriteLine("8. Afficher tous les cuisiniers");
@@ -55,12 +65,19 @@ namespace Rendu1.Modules
                     case "6":
                         GererPlatDuJour();
                         break;
+
+
+
+
+
                     case "7":
                         ImporterCuisiniersDepuisFichier();
                         break;
                     case "8":
                         AfficherTousLesCuisiniers();
                         break;
+
+
                     case "0":
                         continuer = false;
                         break;
@@ -72,12 +89,15 @@ namespace Rendu1.Modules
             }
         }
 
+        /// <summary>
+        /// Ajoute un nouveau cuisinier
+        /// </summary>
         private void AjouterCuisinier()
         {
             Console.Clear();
             Console.WriteLine("=== AJOUT D'UN NOUVEAU CUISINIER ===");
 
-            // D'abord, créer un utilisateur
+            /// D'abord, créer un utilisateur
             Console.WriteLine("\n--- Informations personnelles ---");
             Console.Write("Nom : ");
             string nomU = Console.ReadLine() ?? "";
@@ -93,6 +113,8 @@ namespace Rendu1.Modules
             string villeU = Console.ReadLine() ?? "";
             Console.Write("Téléphone : ");
             string telephoneU = Console.ReadLine() ?? "";
+
+
             Console.Write("Email : ");
             string emailU = Console.ReadLine() ?? "";
             Console.Write("Station de métro la plus proche : ");
@@ -106,7 +128,7 @@ namespace Rendu1.Modules
 
             try
             {
-                // Insérer l'utilisateur
+                /// Insérer l'utilisateur
                 string sqlUser = @"INSERT INTO Utilisateur 
                     (TypeClient, NomU, PrenomU, RueU, NumeroU, CodePostalU, VilleU, 
                     TelephoneU, EmailU, StationPlusProcheU, MDPU)
@@ -132,7 +154,7 @@ namespace Rendu1.Modules
                     clientId = Convert.ToInt32(cmd.ExecuteScalar());
                 }
 
-                // Insérer le cuisinier
+                /// Insérer le cuisinier
                 string sqlCuisinier = @"INSERT INTO Cuisinier 
                     (ClientID, SpecialiteC, Note)
                     VALUES 
@@ -149,13 +171,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de l'ajout du cuisinier : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de l'ajout du cuisinier : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Modifie un cuisinier
+        /// </summary>
         private void ModifierCuisinier()
         {
             Console.Clear();
@@ -166,7 +191,7 @@ namespace Rendu1.Modules
 
             try
             {
-                // Vérifier si le cuisinier existe
+                /// Vérifier si le cuisinier existe
                 string checkSql = @"SELECT c.ClientID, c.SpecialiteC, u.* 
                     FROM Cuisinier c
                     JOIN Utilisateur u ON c.ClientID = u.ClientID
@@ -179,7 +204,7 @@ namespace Rendu1.Modules
                     {
                         if (!reader.Read())
                         {
-                            Console.WriteLine("❌ Cuisinier non trouvé.");
+                            Console.WriteLine(" Cuisinier non trouvé.");
                             Console.ReadKey();
                             return;
                         }
@@ -206,7 +231,7 @@ namespace Rendu1.Modules
                 Console.Write("Ville : ");
                 string ville = Console.ReadLine() ?? "";
 
-                // Mettre à jour l'utilisateur
+                /// Mettre à jour l'utilisatddeur
                 if (!string.IsNullOrWhiteSpace(telephone) || !string.IsNullOrWhiteSpace(rue) || 
                     !string.IsNullOrWhiteSpace(numeroStr) || !string.IsNullOrWhiteSpace(codePostalStr) || 
                     !string.IsNullOrWhiteSpace(ville))
@@ -258,7 +283,7 @@ namespace Rendu1.Modules
                     }
                 }
 
-                // Mettre à jour le cuisinier
+                /// Mettre à josur le cuisinier
                 if (!string.IsNullOrWhiteSpace(specialite))
                 {
                     string updateCuisinierSql = @"UPDATE Cuisinier c
@@ -278,13 +303,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de la modification : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de la modification : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Supprime un cuisinier
+        /// </summary>
         private void SupprimerCuisinier()
         {
             Console.Clear();
@@ -308,18 +336,21 @@ namespace Rendu1.Modules
                     if (rowsAffected > 0)
                         Console.WriteLine("\n✅ Cuisinier désactivé avec succès !");
                     else
-                        Console.WriteLine("\n❌ Cuisinier non trouvé.");
+                        Console.WriteLine("\n Cuisinier non trouvé.");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de la suppression : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de la suppression : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche les clients servis par un cuisinier
+        /// </summary>
         private void AfficherClientsServis()
         {
             Console.Clear();
@@ -345,8 +376,10 @@ namespace Rendu1.Modules
                 Console.Write("Date de fin (YYYY-MM-DD) : ");
                 string dateFin = Console.ReadLine() ?? DateTime.Now.ToString("yyyy-MM-dd");
 
+
                 dateCondition = "AND b.DateCommande BETWEEN @dateDebut AND @dateFin";
                 parameters.Parameters.AddWithValue("@dateDebut", dateDebut);
+
                 parameters.Parameters.AddWithValue("@dateFin", dateFin);
             }
 
@@ -387,14 +420,16 @@ namespace Rendu1.Modules
                             return;
                         }
 
-                        // Afficher les en-têtes
+                        /// Afficher les en-têtes
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
                             Console.Write($"{reader.GetName(i),-25} ");
+
+
                         }
                         Console.WriteLine("\n" + new string('-', reader.FieldCount * 26));
 
-                        // Afficher les données
+                        /// Afficher les données
                         while (reader.Read())
                         {
                             for (int i = 0; i < reader.FieldCount; i++)
@@ -408,13 +443,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de l'affichage : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de l'affichage : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche les plats par fréquence
+        /// </summary>
         private void AfficherPlatsParFrequence()
         {
             Console.Clear();
@@ -459,7 +497,9 @@ namespace Rendu1.Modules
                         }
                         Console.WriteLine("\n" + new string('-', reader.FieldCount * 26));
 
-                        // Afficher les données
+
+
+                        /// Afficher les données
                         while (reader.Read())
                         {
                             for (int i = 0; i < reader.FieldCount; i++)
@@ -473,13 +513,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de l'affichage : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de l'affichage : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Gère le plat du jour
+        /// </summary>
         private void GererPlatDuJour()
         {
             Console.Clear();
@@ -488,7 +531,9 @@ namespace Rendu1.Modules
             Console.Write("Email du cuisinier : ");
             string email = Console.ReadLine() ?? "";
 
-            // Afficher les plats actuels du cuisinier
+
+
+            ///Afficher les plats actuels du cuisinier
             string sqlPlats = @"SELECT p.PlatID, p.NomPlat, p.PrixParPersonne, p.EstDisponible
                 FROM Utilisateur u
                 JOIN Cuisinier c ON u.ClientID = c.ClientID
@@ -499,6 +544,8 @@ namespace Rendu1.Modules
             try
             {
                 Console.WriteLine("\nVos plats :");
+
+
                 using (var cmd = new MySqlCommand(sqlPlats, _db.GetConnection()))
                 {
                     cmd.Parameters.AddWithValue("@email", email);
@@ -522,14 +569,14 @@ namespace Rendu1.Modules
                 Console.Write("\nID du plat à définir comme plat du jour (0 pour annuler) : ");
                 if (int.TryParse(Console.ReadLine(), out int platId) && platId > 0)
                 {
-                    // Désactiver tous les plats
+                    /// Désactiver tous les plats
                     string sqlUpdate1 = @"UPDATE Plat p
                         JOIN Cuisinier c ON p.CuisinierID = c.ClientID
                         JOIN Utilisateur u ON c.ClientID = u.ClientID
                         SET p.EstDisponible = FALSE
                         WHERE u.EmailU = @email";
 
-                    // Activer le plat sélectionné
+                    /// Activer le plat sélectionné
                     string sqlUpdate2 = "UPDATE Plat SET EstDisponible = TRUE WHERE PlatID = @platId";
 
                     using (var cmd1 = new MySqlCommand(sqlUpdate1, _db.GetConnection()))
@@ -547,13 +594,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de la gestion du plat du jour : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de la gestion du plat du jour : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Importe les cuisiniers depuis un fichier
+        /// </summary>
         private void ImporterCuisiniersDepuisFichier()
         {
             Console.Clear();
@@ -566,7 +616,7 @@ namespace Rendu1.Modules
 
             if (!File.Exists(chemin))
             {
-                Console.WriteLine("\n❌ Fichier non trouvé.");
+                Console.WriteLine("\n Fichier non trouvé.");
                 Console.ReadKey();
                 return;
             }
@@ -576,14 +626,14 @@ namespace Rendu1.Modules
                 int importes = 0;
                 int erreurs = 0;
 
-                foreach (string ligne in File.ReadLines(chemin).Skip(1)) // Skip header
+                foreach (string ligne in File.ReadLines(chemin).Skip(1)) /// Skip header
                 {
                     string[] colonnes = ligne.Split(';');
                     if (colonnes.Length != 11) continue;
 
                     try
                     {
-                        // Insérer l'utilisateur
+                        /// Insérer l'utsilisateur
                         string sqlUser = @"INSERT INTO Utilisateur 
                             (TypeClient, NomU, PrenomU, RueU, NumeroU, CodePostalU, VilleU, 
                             TelephoneU, EmailU, StationPlusProcheU, MDPU)
@@ -609,7 +659,7 @@ namespace Rendu1.Modules
                             clientId = Convert.ToInt32(cmd.ExecuteScalar());
                         }
 
-                        // Insérer le cuisinier
+                        /// Insérer le cuisinier
                         string sqlCuisinier = @"INSERT INTO Cuisinier 
                             (ClientID, SpecialiteC, Note)
                             VALUES 
@@ -619,6 +669,8 @@ namespace Rendu1.Modules
                         {
                             cmd.Parameters.AddWithValue("@clientId", clientId);
                             cmd.Parameters.AddWithValue("@specialite", colonnes[10]);
+
+
                             cmd.ExecuteNonQuery();
                         }
 
@@ -634,13 +686,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de l'import : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de l'import : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche tous les cuisiniers
+        /// </summary>
         private void AfficherTousLesCuisiniers()
         {
             Console.Clear();
@@ -693,7 +748,11 @@ namespace Rendu1.Modules
                         Console.WriteLine($"ID: {reader["ClientID"]}");
                         Console.WriteLine($"Email: {reader["EmailU"]}");
                         Console.WriteLine($"Téléphone: {reader["TelephoneU"]}");
+
+
                         Console.WriteLine($"Ville: {reader["VilleU"]}");
+
+
                         Console.WriteLine($"Spécialité: {reader["SpecialiteC"]}");
                         
                         var noteMoyenne = reader["NoteMoyenne"] == DBNull.Value ? "N/A" : $"{Convert.ToDouble(reader["NoteMoyenne"]):F1}/5";
@@ -701,9 +760,13 @@ namespace Rendu1.Modules
                         
                         Console.WriteLine($"Nombre de livraisons: {reader["NombreLivraisonsTotal"]}");
                         Console.WriteLine($"Nombre de plats proposés: {reader["NombrePlats"]}");
+
+
                         Console.WriteLine($"Nombre de commandes: {reader["NombreCommandes"]}");
                         
                         var dateDebut = Convert.ToDateTime(reader["DateDebutActivite"]);
+
+
                         var experience = (DateTime.Now - dateDebut).Days;
                         Console.WriteLine($"En activité depuis: {experience} jours ({dateDebut:dd/MM/yyyy})");
                         
@@ -713,10 +776,11 @@ namespace Rendu1.Modules
 
                 Console.WriteLine("\nAppuyez sur une touche pour continuer...");
                 Console.ReadKey();
+                
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de l'affichage des cuisiniers : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de l'affichage des cuisiniers : {ex.Message}");
                 Console.ReadKey();
             }
         }

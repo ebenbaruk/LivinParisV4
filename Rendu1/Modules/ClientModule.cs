@@ -6,6 +6,10 @@ using MySql.Data.MySqlClient;
 
 namespace Rendu1.Modules
 {
+    /// <summary>
+    /// Module pour la gestion des clients  
+    /// Permet d'ajouter, modifier, supprimer et afficher les clients
+    /// </summary>
     public class ClientModule
     {
         private readonly DatabaseManager _db;
@@ -22,9 +26,13 @@ namespace Rendu1.Modules
             {
                 Console.Clear();
                 Console.WriteLine("=== MENU CLIENT ===");
+
                 Console.WriteLine("1. Ajouter un nouveau client");
                 Console.WriteLine("2. Modifier un client");
+
                 Console.WriteLine("3. Supprimer un client");
+
+
                 Console.WriteLine("4. Afficher les clients par ordre alphabétique");
                 Console.WriteLine("5. Afficher les clients par rue");
                 Console.WriteLine("6. Afficher les clients par montant d'achats");
@@ -39,9 +47,13 @@ namespace Rendu1.Modules
                     case "1":
                         AjouterClient();
                         break;
+
                     case "2":
                         ModifierClient();
                         break;
+
+
+
                     case "3":
                         SupprimerClient();
                         break;
@@ -51,9 +63,13 @@ namespace Rendu1.Modules
                     case "5":
                         AfficherClientsParRue();
                         break;
+
                     case "6":
                         AfficherClientsParMontantAchats();
                         break;
+
+
+
                     case "7":
                         ImporterClientsDepuisFichier();
                         break;
@@ -68,12 +84,19 @@ namespace Rendu1.Modules
             }
         }
 
+        /// <summary>
+        /// Ajouterr un nouveaux client à la base de données, 
+        /// permet de choisir entre particulier et entreprise, 
+        /// 
+        /// et d'ajouter les informlations dans la base de données
+        /// </summary>
         private void AjouterClient()
         {
             Console.Clear();
             Console.WriteLine("=== AJOUT D'UN NOUVEAU CLIENT ===");
 
             Console.Write("Type de client (1: Particulier, 2: Entreprise) : ");
+
             string? typeClient = Console.ReadLine() == "1" ? "Particulier" : "Entreprise";
 
             string nomU, prenomU = "", nomEntreprise = "", nomReferent = "";
@@ -82,6 +105,7 @@ namespace Rendu1.Modules
             {
                 Console.Write("Nom : ");
                 nomU = Console.ReadLine() ?? "";
+
                 Console.Write("Prénom : ");
                 prenomU = Console.ReadLine() ?? "";
             }
@@ -89,6 +113,7 @@ namespace Rendu1.Modules
             {
                 Console.Write("Nom de l'entreprise : ");
                 nomEntreprise = Console.ReadLine() ?? "";
+
                 Console.Write("Nom du référent : ");
                 nomReferent = Console.ReadLine() ?? "";
                 nomU = nomEntreprise;
@@ -98,19 +123,25 @@ namespace Rendu1.Modules
             string rueU = Console.ReadLine() ?? "";
             Console.Write("Numéro : ");
             int numeroU = int.Parse(Console.ReadLine() ?? "0");
+
+
             Console.Write("Code postal : ");
             int codePostalU = int.Parse(Console.ReadLine() ?? "0");
             Console.Write("Ville : ");
             string villeU = Console.ReadLine() ?? "";
+
+
             Console.Write("Téléphone : ");
             string telephoneU = Console.ReadLine() ?? "";
             Console.Write("Email : ");
             string emailU = Console.ReadLine() ?? "";
             Console.Write("Station de métro la plus proche : ");
+
             string stationPlusProcheU = Console.ReadLine() ?? "";
             Console.Write("Mot de passe : ");
             string mdpU = Console.ReadLine() ?? "";
 
+            /// Requête pour insérer un nouveau client dans la base de données.
             string sql = @"INSERT INTO Utilisateur 
                 (TypeClient, NomU, PrenomU, NomEntreprise, NomReferent, RueU, NumeroU, 
                 CodePostalU, VilleU, TelephoneU, EmailU, StationPlusProcheU, MDPU)
@@ -137,18 +168,22 @@ namespace Rendu1.Modules
                     cmd.Parameters.AddWithValue("@mdp", mdpU);
 
                     cmd.ExecuteNonQuery();
-                    Console.WriteLine("\n✅ Client ajouté avec succès !");
+                    Console.WriteLine("\n Client ajouté avec succès !");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de l'ajout du client : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de l'ajout du client : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Modifie les informations d'un client existant,
+        /// permet de modifier les informations de son téléphone, rue, numéro, code postal, ville, station de métro et mot de passe
+        /// </summary>
         private void ModifierClient()
         {
             Console.Clear();
@@ -157,18 +192,20 @@ namespace Rendu1.Modules
             Console.Write("Email du client à modifier : ");
             string email = Console.ReadLine() ?? "";
 
-            // Vérifier si le client existe
+            /// Vérifier si le client existe
             string checkSql = "SELECT * FROM Utilisateur WHERE EmailU = @email";
             try
             {
                 using (var cmd = new MySqlCommand(checkSql, _db.GetConnection()))
                 {
                     cmd.Parameters.AddWithValue("@email", email);
+
+
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (!reader.Read())
                         {
-                            Console.WriteLine("❌ Client non trouvé.");
+                            Console.WriteLine(" Client non trouvé.");
                             Console.ReadKey();
                             return;
                         }
@@ -185,12 +222,16 @@ namespace Rendu1.Modules
                 
                 Console.Write("Numéro : ");
                 string numeroStr = Console.ReadLine() ?? "";
+
+
                 
                 Console.Write("Code postal : ");
                 string codePostalStr = Console.ReadLine() ?? "";
                 
                 Console.Write("Ville : ");
                 string ville = Console.ReadLine() ?? "";
+
+
 
                 Console.Write("Station de métro la plus proche : ");
                 string station = Console.ReadLine() ?? "";
@@ -201,6 +242,9 @@ namespace Rendu1.Modules
                 string updateSql = "UPDATE Utilisateur SET ";
                 List<string> updates = new List<string>();
                 var parameters = new MySqlCommand();
+
+
+
 
                 if (!string.IsNullOrWhiteSpace(telephone))
                 {
@@ -222,6 +266,8 @@ namespace Rendu1.Modules
                     updates.Add("CodePostalU = @codePostal");
                     parameters.Parameters.AddWithValue("@codePostal", codePostal);
                 }
+
+
                 if (!string.IsNullOrWhiteSpace(ville))
                 {
                     updates.Add("VilleU = @ville");
@@ -232,6 +278,8 @@ namespace Rendu1.Modules
                     updates.Add("StationPlusProcheU = @station");
                     parameters.Parameters.AddWithValue("@station", station);
                 }
+
+
                 if (!string.IsNullOrWhiteSpace(mdp))
                 {
                     updates.Add("MDPU = @mdp");
@@ -251,7 +299,7 @@ namespace Rendu1.Modules
                             cmd.Parameters.Add(param);
                         }
                         cmd.ExecuteNonQuery();
-                        Console.WriteLine("\n✅ Client modifié avec succès !");
+                        Console.WriteLine("\n Client modifié avec succès !");
                     }
                 }
                 else
@@ -261,13 +309,17 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de la modification : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de la modification : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Supprime un client de la base de données,
+        /// permet de suppprimer un client en entrant son emaills 
+        /// </summary>
         private void SupprimerClient()
         {
             Console.Clear();
@@ -276,9 +328,12 @@ namespace Rendu1.Modules
             Console.Write("Email du client à supprimer : ");
             string email = Console.ReadLine() ?? "";
 
+
+
+
             try
             {
-                // Suppression réelle du client
+                /// Suppression réelle du client
                 string sql = "DELETE FROM Utilisateur WHERE EmailU = @email";
                 using (var cmd = new MySqlCommand(sql, _db.GetConnection()))
                 {
@@ -286,25 +341,33 @@ namespace Rendu1.Modules
                     int rowsAffected = cmd.ExecuteNonQuery();
 
                     if (rowsAffected > 0)
-                        Console.WriteLine("\n✅ Client supprimé avec succès !");
+                        Console.WriteLine("\n Client supprimé avec succès !");
                     else
-                        Console.WriteLine("\n❌ Client non trouvé.");
+                        Console.WriteLine("\n Client non trouvé.");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de la suppression : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de la suppression : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche les clients par ordre alphabétique,
+        /// 
+        /// 
+        /// permet de trier les clients par ordre alphabétique
+        /// </summary>
         private void AfficherClientsParOrdreAlphabetique()
         {
             Console.Clear();
             Console.WriteLine("=== CLIENTS PAR ORDRE ALPHABÉTIQUE ===\n");
 
+            /// Requête pour récupérer les clients par ordre alphabétique, 
+            /// permet de trier les clients par ordre alphabétique
             string sql = @"SELECT 
                 TypeClient,
                 CASE 
@@ -321,6 +384,10 @@ namespace Rendu1.Modules
             AfficherResultatsClient(sql);
         }
 
+        /// <summary>
+        /// Affiche les clients par rue,
+        /// permet de trier les clients par rue et numéro
+        /// </summary>
         private void AfficherClientsParRue()
         {
             Console.Clear();
@@ -344,6 +411,10 @@ namespace Rendu1.Modules
             AfficherResultatsClient(sql);
         }
 
+        /// <summary>
+        /// Affiche les clients par montant d'achats,
+        /// permet de trier les clients par montant d'achats
+        /// </summary>
         private void AfficherClientsParMontantAchats()
         {
             Console.Clear();
@@ -367,11 +438,20 @@ namespace Rendu1.Modules
             AfficherResultatsClient(sql);
         }
 
+        /// <summary>
+        /// Importe les clients depuis un fichier,
+        /// permet d'importer les clients depuis un fichier CSV
+        /// 
+        /// 
+        /// </summary>
         private void ImporterClientsDepuisFichier()
         {
             Console.Clear();
             Console.WriteLine("=== IMPORT DE CLIENTS DEPUIS UN FICHIER ===");
+
             Console.WriteLine("Le fichier doit être au format CSV avec les colonnes suivantes :");
+
+
             Console.WriteLine("TypeClient;Nom;Prenom;NomEntreprise;NomReferent;Rue;Numero;CodePostal;Ville;Telephone;Email;Station;MotDePasse\n");
 
             Console.Write("Chemin du fichier : ");
@@ -379,7 +459,7 @@ namespace Rendu1.Modules
 
             if (!File.Exists(chemin))
             {
-                Console.WriteLine("\n❌ Fichier non trouvé.");
+                Console.WriteLine("\n Fichier non trouvé.");
                 Console.ReadKey();
                 return;
             }
@@ -387,6 +467,7 @@ namespace Rendu1.Modules
             try
             {
                 int importes = 0;
+
                 int erreurs = 0;
 
                 foreach (string ligne in File.ReadLines(chemin).Skip(1)) // Skip header
@@ -394,6 +475,7 @@ namespace Rendu1.Modules
                     string[] colonnes = ligne.Split(';');
                     if (colonnes.Length != 13) continue;
 
+                    /// Requête pour insérer un nouveau client dans la base de données.
                     string sql = @"INSERT INTO Utilisateur 
                         (TypeClient, NomU, PrenomU, NomEntreprise, NomReferent, RueU, NumeroU, 
                         CodePostalU, VilleU, TelephoneU, EmailU, StationPlusProcheU, MDPU)
@@ -403,19 +485,25 @@ namespace Rendu1.Modules
 
                     try
                     {
+
+
                         using (var cmd = new MySqlCommand(sql, _db.GetConnection()))
                         {
                             cmd.Parameters.AddWithValue("@type", colonnes[0]);
                             cmd.Parameters.AddWithValue("@nom", colonnes[1]);
                             cmd.Parameters.AddWithValue("@prenom", colonnes[2]);
+
                             cmd.Parameters.AddWithValue("@nomEntreprise", colonnes[3]);
+
                             cmd.Parameters.AddWithValue("@nomReferent", colonnes[4]);
                             cmd.Parameters.AddWithValue("@rue", colonnes[5]);
+
                             cmd.Parameters.AddWithValue("@numero", int.Parse(colonnes[6]));
                             cmd.Parameters.AddWithValue("@codePostal", int.Parse(colonnes[7]));
                             cmd.Parameters.AddWithValue("@ville", colonnes[8]);
                             cmd.Parameters.AddWithValue("@telephone", colonnes[9]);
                             cmd.Parameters.AddWithValue("@email", colonnes[10]);
+
                             cmd.Parameters.AddWithValue("@station", colonnes[11]);
                             cmd.Parameters.AddWithValue("@mdp", colonnes[12]);
 
@@ -429,17 +517,21 @@ namespace Rendu1.Modules
                     }
                 }
 
-                Console.WriteLine($"\n✅ Import terminé : {importes} clients importés, {erreurs} erreurs.");
+                Console.WriteLine($"\n Import terminé : {importes} clients importés, {erreurs} erreurs.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de l'import : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de l'import : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche les résultats des clients,
+        /// permet d'afficher kes clients dans un tableau
+        /// </summary>
         private void AfficherResultatsClient(string sql)
         {
             try
@@ -447,19 +539,23 @@ namespace Rendu1.Modules
                 using (var cmd = new MySqlCommand(sql, _db.GetConnection()))
                 using (var reader = cmd.ExecuteReader())
                 {
-                    // Afficher les en-têtes
+                    /// Afficher les en-têtes
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
                         Console.Write($"{reader.GetName(i),-20} ");
+
+
                     }
                     Console.WriteLine("\n" + new string('-', reader.FieldCount * 21));
 
-                    // Afficher les données
+                    /// Afficher les données
                     while (reader.Read())
                     {
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
                             Console.Write($"{reader[i],-20} ");
+
+
                         }
                         Console.WriteLine();
                     }
@@ -467,13 +563,21 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de l'affichage : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de l'affichage : {ex.Message}");
+
+
+
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Crée un nouveau client,
+
+        /// permet de créer un nouveau client
+        /// </summary>
         public int CreerNouveauClient()
         {
             Console.Clear();
@@ -481,12 +585,17 @@ namespace Rendu1.Modules
 
             try
             {
-                // Type de client
+                /// Type de client
                 Console.WriteLine("Type de client :");
                 Console.WriteLine("1. Particulier");
+
+
                 Console.WriteLine("2. Entreprise");
+
                 Console.Write("Votre choix (1 ou 2) : ");
                 string typeChoix = Console.ReadLine() ?? "1";
+
+
                 string typeClient = typeChoix == "2" ? "Entreprise" : "Particulier";
 
                 string nomU = "", prenomU = "", nomEntreprise = "", nomReferent = "";
@@ -494,6 +603,8 @@ namespace Rendu1.Modules
                 {
                     Console.Write("Nom : ");
                     nomU = Console.ReadLine() ?? "";
+
+
                     Console.Write("Prénom : ");
                     prenomU = Console.ReadLine() ?? "";
                 }
@@ -501,7 +612,11 @@ namespace Rendu1.Modules
                 {
                     Console.Write("Nom de l'entreprise : ");
                     nomEntreprise = Console.ReadLine() ?? "";
+
+
                     Console.Write("Nom du référent : ");
+
+
                     nomReferent = Console.ReadLine() ?? "";
                 }
 
@@ -509,19 +624,26 @@ namespace Rendu1.Modules
                 string rueU = Console.ReadLine() ?? "";
                 Console.Write("Numéro : ");
                 int numeroU = int.Parse(Console.ReadLine() ?? "0");
+
                 Console.Write("Code postal : ");
                 int codePostalU = int.Parse(Console.ReadLine() ?? "0");
+
                 Console.Write("Ville : ");
+
                 string villeU = Console.ReadLine() ?? "";
                 Console.Write("Téléphone : ");
                 string telephoneU = Console.ReadLine() ?? "";
                 Console.Write("Email : ");
+
                 string emailU = Console.ReadLine() ?? "";
                 Console.Write("Station de métro la plus proche : ");
+
+
                 string stationPlusProcheU = Console.ReadLine() ?? "";
                 Console.Write("Mot de passe : ");
                 string mdpU = Console.ReadLine() ?? "";
 
+                /// Requête pour insérer un nouveau client dans la base de données.
                 string sql = @"INSERT INTO Utilisateur 
                     (TypeClient, NomU, PrenomU, NomEntreprise, NomReferent, RueU, NumeroU, 
                     CodePostalU, VilleU, TelephoneU, EmailU, StationPlusProcheU, MDPU)
@@ -547,13 +669,13 @@ namespace Rendu1.Modules
                     cmd.Parameters.AddWithValue("@mdp", mdpU);
 
                     int clientId = Convert.ToInt32(cmd.ExecuteScalar());
-                    Console.WriteLine("\n✅ Client créé avec succès !");
+                    Console.WriteLine("\n Client créé avec succès !");
                     return clientId;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n❌ Erreur lors de la création du client : {ex.Message}");
+                Console.WriteLine($"\n Erreur lors de la création du client : {ex.Message}");
                 return -1;
             }
         }

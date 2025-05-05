@@ -1,75 +1,86 @@
-# Système de Navigation Métro Parisien
+# Liv'in Paris - Application de Livraison de Repas
 
 ## Description
-Ce projet implémente un système de navigation pour le métro parisien permettant de trouver le chemin le plus court entre deux stations en utilisant différents algorithmes de graphe.
+Liv'in Paris est une application de livraison de repas qui met en relation des cuisiniers locaux avec des clients. Elle permet aux cuisiniers de proposer leurs plats et aux clients de commander des repas faits maison.
 
-## Fonctionnalités
-- Chargement et analyse des données du réseau de métro parisien
-- Recherche du plus court chemin entre deux stations utilisant trois algorithmes différents :
-  - Dijkstra
-  - Bellman-Ford
-  - Floyd-Warshall
-- Comparaison des performances des algorithmes
-- Interface utilisateur interactive pour rechercher des itinéraires personnalisés
-- Visualisation graphique du réseau de métro et des itinéraires calculés
+## Fonctionnalités Principales
 
-## Visualisation
-Le système génère des visualisations pour :
-- Le réseau complet du métro parisien
-- Les itinéraires calculés par chaque algorithme
+### Pour les Clients
+- Inscription et connexion sécurisée
+- Consultation du catalogue de plats disponibles
+- Recherche et filtrage des plats
+- Passage de commandes
+- Suivi en temps réel des commandes
+- Modification du profil utilisateur
 
-Les visualisations sont sauvegardées dans le dossier "Visualisations" et peuvent être consultées directement depuis l'application.
+### Pour les Cuisiniers
+- Double mode de connexion (Client/Cuisinier)
+- Gestion de leur catalogue de plats
+  - Ajout de nouveaux plats
+  - Modification des plats existants
+  - Retrait de plats
+- Gestion des commandes entrantes
+- Suivi des revenus et statistiques
 
-## Algorithmes implémentés
+## Architecture du Projet
 
-### Dijkstra
-- **Complexité** : O((V+E)log V)
-- **Avantages** : Efficace pour trouver le chemin entre deux stations spécifiques
-- **Limitations** : Ne fonctionne pas avec des poids négatifs
+### Interface Utilisateur (Forms/)
+- `Form1.cs` : Formulaire de connexion
+- `RegisterForm.cs` : Inscription des nouveaux utilisateurs
+- `MainForm.cs` : Interface principale pour les clients
+- `CuisinierForm.cs` : Interface dédiée aux cuisiniers
+- `CommandeForm.cs` : Gestion des commandes
+- `ChoixModeForm.cs` : Sélection du mode (Client/Cuisinier)
+- `ModifierPlatForm.cs` : Édition des plats
+- `AjouterPlatForm.cs` : Création de nouveaux plats
+- `ModifierProfilForm.cs` : Modification du profil utilisateur
+- `DetailsCommandeForm.cs` : Détails d'une commande
+- `CommandeProgressForm.cs` : Suivi de l'état des commandes
 
-### Bellman-Ford
-- **Complexité** : O(V*E)
-- **Avantages** : Peut gérer les poids négatifs
-- **Limitations** : Plus lent que Dijkstra pour les graphes sans poids négatifs
+### Logique Métier (Rendu1/Modules/)
+- Gestion de l'authentification
+- Gestion des utilisateurs
+- Gestion des commandes
+- Gestion du catalogue de plats
+- Export des données (XML/JSON)
 
-### Floyd-Warshall
-- **Complexité** : O(V³)
-- **Avantages** : Calcule tous les chemins les plus courts entre toutes les paires de stations
-- **Limitations** : Plus lent pour trouver un seul chemin spécifique
+### Base de Données
+- Utilisation de MySQL pour le stockage des données
+- Tables principales :
+  - Utilisateurs
+  - Cuisiniers
+  - Plats
+  - Commandes
+  - Évaluations
 
-## Structure du projet
-- **Program.cs** : Point d'entrée du programme avec l'interface utilisateur
-- **Graphe.cs** : Implémentation générique d'un graphe et des algorithmes de plus court chemin
-- **Station.cs** : Classe représentant une station de métro
-- **MetroParisien.cs** : Classe gérant le chargement et la manipulation des données du métro
-- **MetroVisualisation.cs** : Classe pour la visualisation graphique du réseau et des chemins
+## Technologies Utilisées
+- C# .NET
+- Windows Forms pour l'interface graphique
+- MySQL pour la base de données
 
-## Prérequis
-- .NET 8.0 ou supérieur
-- SkiaSharp pour la visualisation graphique
 
-## Comment utiliser l'application
-1. Lancer l'application
-2. Le menu principal propose plusieurs options :
-   - Exécuter les tests prédéfinis pour voir des exemples d'itinéraires
-   - Rechercher un itinéraire personnalisé entre deux stations
-   - Afficher la liste des stations disponibles
-   - Ouvrir le dossier contenant les visualisations générées
-3. Pour rechercher un itinéraire personnalisé :
-   - Entrez le nom (ou une partie du nom) de la station de départ
-   - Sélectionnez la station dans la liste des correspondances
-   - Répétez pour la station d'arrivée
-   - Le système affichera les itinéraires calculés par les trois algorithmes
+## Installation et Prérequis
+1. .NET Framework 4.8 ou supérieur
+2. MySQL Server
+3. Visual Studio 2019 ou supérieur
 
-## Format des données
-Le système utilise un fichier CSV contenant les informations sur les stations, au format :
-```
-Ligne;Station;Coordonnées;StationPrécédente;StationSuivante;Correspondances
-```
-Le fichier doit être placé dans le dossier "DataMetro" sous le nom "metro.csv".
+## Configuration
+1. Cloner le repository
+2. Restaurer les packages NuGet
+3. Configurer la connexion à la base de données dans `DatabaseManager.cs`
+4. Compiler et exécuter le projet
 
-## Améliorations futures
-- Mise à jour des données avec les nouvelles lignes et stations
-- Prise en compte des horaires réels de passage des trains
-- Intégration d'une interface graphique plus élaborée
-- Application mobile pour accéder au système en déplacement 
+## Structure de la Base de Données
+La base de données contient les tables suivantes avec leurs relations :
+- `Utilisateur` : Informations de base des utilisateurs
+- `Cuisinier` : Informations spécifiques aux cuisiniers
+- `Plat` : Catalogue des plats disponibles
+- `Commande` : Suivi des commandes
+- `Evaluation` : Avis des clients
+
+## Fonctionnalités à Venir
+- Système de paiement intégré
+- Chat en temps réel entre clients et cuisiniers
+- Système de notation et d'avis plus élaboré
+- Gestion des allergènes et régimes spéciaux
+

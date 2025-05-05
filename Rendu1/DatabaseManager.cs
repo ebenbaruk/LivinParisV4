@@ -4,6 +4,9 @@ using MySql.Data.MySqlClient;
 
 namespace Rendu1
 {
+    /// <summary>
+    /// Gestionnaire de base de données MySQL
+    /// </summary>
     public class DatabaseManager
     {
         private readonly string _connectionString;
@@ -14,6 +17,9 @@ namespace Rendu1
             _connectionString = $"server={server};port=3306;database={database};user={user};password={password};";
         }
 
+        /// <summary>
+        /// Connexion à la base de données
+        /// </summary>
         public bool Connect()
         {
             try
@@ -28,12 +34,15 @@ namespace Rendu1
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("❌ Erreur de connexion : " + ex.Message);
+                Console.WriteLine(" Erreur de connexion : " + ex.Message);
                 Console.ResetColor();
                 return false;
             }
         }
 
+        /// <summary>
+        /// Déconnexion de la base de données
+        /// </summary>
         public void Disconnect()
         {
             if (_connection != null && _connection.State == ConnectionState.Open)
@@ -43,6 +52,9 @@ namespace Rendu1
             }
         }
 
+        /// <summary>
+        /// Récupérer la connexion à la base de données
+        /// </summary>
         public MySqlConnection GetConnection()
         {
             if (_connection == null || _connection.State != ConnectionState.Open)
@@ -52,6 +64,9 @@ namespace Rendu1
             return _connection;
         }
 
+        /// <summary>
+        /// Exécuter une requête non-sélective
+        /// </summary>
         public void ExecuteNonQuery(string sql)
         {
             try
@@ -65,11 +80,14 @@ namespace Rendu1
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("❌ Erreur lors de l'exécution de la requête : " + ex.Message);
+                Console.WriteLine(" Erreur lors de l'exécution de la requête : " + ex.Message);
                 Console.ResetColor();
             }
         }
 
+        /// <summary>
+        /// Exécuter une requête sélective
+        /// </summary>
         public void ExecuteQuery(string sql)
         {
             try
@@ -91,7 +109,7 @@ namespace Rendu1
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("❌ Erreur lors de la lecture des résultats : " + ex.Message);
+                Console.WriteLine(" Erreur lors de la lecture des résultats : " + ex.Message);
                 Console.ResetColor();
             }
         }

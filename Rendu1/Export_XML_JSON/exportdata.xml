@@ -1,0 +1,242 @@
+<DATA>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD001</CommandeID>
+		<DateCommande>2025-04-24 18:18:45</DateCommande>
+		<DateSouhaitee>2025-04-25 18:18:45</DateSouhaitee>
+		<DateLivraison>NULL</DateLivraison>
+		<PrixPaye>60.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>Durand</NomClient>
+		<PrenomClient>Medhy</PrenomClient>
+		<AdresseBon>15 Rue Cardinet, 75017 Paris</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250429161043</CommandeID>
+		<DateCommande>2025-04-29 16:10:43</DateCommande>
+		<DateSouhaitee>2025-04-29 17:00:00</DateSouhaitee>
+		<DateLivraison>NULL</DateLivraison>
+		<PrixPaye>60.00</PrixPaye>
+		<ModePaiement>NULL</ModePaiement>
+		<Statut>Annulée</Statut>
+		<NomClient>Leonelli W</NomClient>
+		<PrenomClient>Charles</PrenomClient>
+		<AdresseBon></AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250429161558</CommandeID>
+		<DateCommande>2025-04-29 16:15:58</DateCommande>
+		<DateSouhaitee>2025-04-29 17:00:00</DateSouhaitee>
+		<DateLivraison>NULL</DateLivraison>
+		<PrixPaye>20.00</PrixPaye>
+		<ModePaiement>NULL</ModePaiement>
+		<Statut>Annulée</Statut>
+		<NomClient>Benyezza</NomClient>
+		<PrenomClient>Ali</PrenomClient>
+		<AdresseBon></AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250429163347</CommandeID>
+		<DateCommande>2025-04-29 16:33:47</DateCommande>
+		<DateSouhaitee>2025-04-29 17:00:00</DateSouhaitee>
+		<DateLivraison>NULL</DateLivraison>
+		<PrixPaye>40.00</PrixPaye>
+		<ModePaiement>NULL</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>test</NomClient>
+		<PrenomClient>user</PrenomClient>
+		<AdresseBon>Billancourt</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250430110928</CommandeID>
+		<DateCommande>2025-04-30 11:09:28</DateCommande>
+		<DateSouhaitee>2025-04-30 11:10:00</DateSouhaitee>
+		<DateLivraison>2025-04-30 11:10:13</DateLivraison>
+		<PrixPaye>45.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>test</NomClient>
+		<PrenomClient>user</PrenomClient>
+		<AdresseBon>Billancourt</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250430121643</CommandeID>
+		<DateCommande>2025-04-30 12:16:43</DateCommande>
+		<DateSouhaitee>2025-04-30 12:17:00</DateSouhaitee>
+		<DateLivraison>2025-04-30 12:17:17</DateLivraison>
+		<PrixPaye>15.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>test</NomClient>
+		<PrenomClient>user</PrenomClient>
+		<AdresseBon>Billancourt</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250502153854</CommandeID>
+		<DateCommande>2025-05-02 15:38:54</DateCommande>
+		<DateSouhaitee>2025-05-02 15:40:00</DateSouhaitee>
+		<DateLivraison>2025-05-02 15:39:21</DateLivraison>
+		<PrixPaye>30.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>Bellolo</NomClient>
+		<PrenomClient>David</PrenomClient>
+		<AdresseBon>Quai de la Rapée</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250502173803</CommandeID>
+		<DateCommande>2025-05-02 17:38:03</DateCommande>
+		<DateSouhaitee>2025-05-02 17:37:00</DateSouhaitee>
+		<DateLivraison>2025-05-02 17:38:42</DateLivraison>
+		<PrixPaye>30.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>test</NomClient>
+		<PrenomClient>user</PrenomClient>
+		<AdresseBon>Billancourt</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250503172630</CommandeID>
+		<DateCommande>2025-05-03 17:26:30</DateCommande>
+		<DateSouhaitee>2025-05-03 18:26:08</DateSouhaitee>
+		<DateLivraison>NULL</DateLivraison>
+		<PrixPaye>27.00</PrixPaye>
+		<ModePaiement>NULL</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>test</NomClient>
+		<PrenomClient>user</PrenomClient>
+		<AdresseBon>Adresse de l'utilisateur</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>3</CuisinierID>
+		<NomCuisinier>Benbaruk</NomCuisinier>
+		<PrenomCuisinier>Eli</PrenomCuisinier>
+		<CommandeID>CMD20250503173700</CommandeID>
+		<DateCommande>2025-05-03 17:37:00</DateCommande>
+		<DateSouhaitee>2025-05-03 18:36:45</DateSouhaitee>
+		<DateLivraison>NULL</DateLivraison>
+		<PrixPaye>18.00</PrixPaye>
+		<ModePaiement>NULL</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>test</NomClient>
+		<PrenomClient>user</PrenomClient>
+		<AdresseBon>Adresse de l'utilisateur</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>9</CuisinierID>
+		<NomCuisinier>Test</NomCuisinier>
+		<PrenomCuisinier>Cuisuinier</PrenomCuisinier>
+		<CommandeID>CMD20250502154006</CommandeID>
+		<DateCommande>2025-05-02 15:40:06</DateCommande>
+		<DateSouhaitee>2025-05-02 15:41:00</DateSouhaitee>
+		<DateLivraison>2025-05-02 15:40:35</DateLivraison>
+		<PrixPaye>10.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>Bellolo</NomClient>
+		<PrenomClient>David</PrenomClient>
+		<AdresseBon>Quai de la Rapée</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>9</CuisinierID>
+		<NomCuisinier>Test</NomCuisinier>
+		<PrenomCuisinier>Cuisuinier</PrenomCuisinier>
+		<CommandeID>CMD20250502154313</CommandeID>
+		<DateCommande>2025-05-02 15:43:13</DateCommande>
+		<DateSouhaitee>2025-05-02 15:43:00</DateSouhaitee>
+		<DateLivraison>2025-05-02 15:43:58</DateLivraison>
+		<PrixPaye>15.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>Benbaruk</NomClient>
+		<PrenomClient>Eli</PrenomClient>
+		<AdresseBon>Porte Dauphine</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>10</CuisinierID>
+		<NomCuisinier>Guilhem</NomCuisinier>
+		<PrenomCuisinier>Hennoux</PrenomCuisinier>
+		<CommandeID>CMD20250502154123</CommandeID>
+		<DateCommande>2025-05-02 15:41:23</DateCommande>
+		<DateSouhaitee>2025-05-02 15:42:00</DateSouhaitee>
+		<DateLivraison>2025-05-02 15:41:56</DateLivraison>
+		<PrixPaye>27.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>Bellolo</NomClient>
+		<PrenomClient>David</PrenomClient>
+		<AdresseBon>Quai de la Rapée</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>10</CuisinierID>
+		<NomCuisinier>Guilhem</NomCuisinier>
+		<PrenomCuisinier>Hennoux</PrenomCuisinier>
+		<CommandeID>CMD20250502154428</CommandeID>
+		<DateCommande>2025-05-02 15:44:28</DateCommande>
+		<DateSouhaitee>2025-05-02 15:44:00</DateSouhaitee>
+		<DateLivraison>2025-05-02 15:44:55</DateLivraison>
+		<PrixPaye>18.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>Benbaruk</NomClient>
+		<PrenomClient>Eli</PrenomClient>
+		<AdresseBon>Porte Dauphine</AdresseBon>
+	</ROW>
+
+	<ROW>
+		<CuisinierID>10</CuisinierID>
+		<NomCuisinier>Guilhem</NomCuisinier>
+		<PrenomCuisinier>Hennoux</PrenomCuisinier>
+		<CommandeID>CMD20250502154555</CommandeID>
+		<DateCommande>2025-05-02 15:45:55</DateCommande>
+		<DateSouhaitee>2025-05-02 15:45:00</DateSouhaitee>
+		<DateLivraison>2025-05-02 15:46:20</DateLivraison>
+		<PrixPaye>18.00</PrixPaye>
+		<ModePaiement>Carte Bancaire</ModePaiement>
+		<Statut>Livrée</Statut>
+		<NomClient>Test</NomClient>
+		<PrenomClient>Cuisuinier</PrenomClient>
+		<AdresseBon>Goncourt</AdresseBon>
+	</ROW>
+</DATA>

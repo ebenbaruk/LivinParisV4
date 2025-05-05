@@ -61,7 +61,7 @@ namespace Rendu1
 
         public override int GetHashCode()
         {
-            // Pour que le hash soit le même dans les deux sens (A->B et B->A)
+            /// Pour que le hash soit le même dans les deux sens (A->B et B->A)
             int sourceHash = Source.GetHashCode();
             int destHash = Destination.GetHashCode();
             return sourceHash < destHash ? 
@@ -70,7 +70,9 @@ namespace Rendu1
         }
     }
     
-    // Gardons l'ancienne classe non générique pour la compatibilité avec le code existant
+    /// <summary>
+    /// Gardons l'ancienne classe non générique pour la compatibilité avec le code existant
+    /// </summary>
     public class Lien
     {
         /// Noeud source du lien

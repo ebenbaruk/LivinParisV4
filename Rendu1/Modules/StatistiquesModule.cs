@@ -4,6 +4,9 @@ using MySql.Data.MySqlClient;
 
 namespace Rendu1.Modules
 {
+    /// <summary>
+    /// Module pour la gestion des statistiques, permettant de visualiser les bilans, les commandes par période, les moyennes de prix, les statistiques des comptes clients et les commandes filtrées
+    /// </summary>
     public class StatistiquesModule
     {
         private readonly DatabaseManager _db;
@@ -13,6 +16,9 @@ namespace Rendu1.Modules
             _db = db;
         }
 
+        /// <summary>
+        /// Affiche le menu des statistiques
+        /// </summary>
         public void AfficherMenuStatistiques()
         {
             bool continuer = true;
@@ -58,6 +64,9 @@ namespace Rendu1.Modules
             }
         }
 
+        /// <summary>
+        /// Affiche le bilan des livraisons par cuisinier
+        /// </summary>
         private void AfficherBilanLivraisonsParCuisinier()
         {
             Console.Clear();
@@ -77,6 +86,8 @@ namespace Rendu1.Modules
                 GROUP BY u.ClientID
                 ORDER BY CommandesLivrees DESC";
 
+            /// Afficher les données
+
             try
             {
                 using var cmd = new MySqlCommand(sql, _db.GetConnection());
@@ -88,6 +99,7 @@ namespace Rendu1.Modules
                     Console.ReadKey();
                     return;
                 }
+                
 
                 while (reader.Read())
                 {
@@ -107,13 +119,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Erreur : {ex.Message}");
+                Console.WriteLine($" Erreur : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche les commandes par période, entre 2 dattes
+        /// </summary>
         private void AfficherCommandesParPeriode()
         {
             Console.Clear();
@@ -181,13 +196,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Erreur : {ex.Message}");
+                Console.WriteLine($" Erreur : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche la moyenne des prix des commandes
+        /// </summary>
         private void AfficherMoyennePrixCommandes()
         {
             Console.Clear();
@@ -219,13 +237,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Erreur : {ex.Message}");
+                Console.WriteLine($" Erreur : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche les statistiques des comptes clients
+        /// </summary>
         private void AfficherStatistiquesClients()
         {
             Console.Clear();
@@ -259,13 +280,16 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Erreur : {ex.Message}");
+                Console.WriteLine($" Erreur : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Affiche les commandes filtrées par client
+        /// </summary>
         private void AfficherCommandesClientFiltrees()
         {
             Console.Clear();
@@ -290,6 +314,8 @@ namespace Rendu1.Modules
                 }
                 dateDebut = date;
             }
+
+            /// Afficher les données
 
             Console.Write("Date de fin (YYYY-MM-DD, laisser vide pour toutes) : ");
             string dateFinStr = Console.ReadLine() ?? "";
@@ -361,7 +387,7 @@ namespace Rendu1.Modules
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Erreur : {ex.Message}");
+                Console.WriteLine($" Erreur : {ex.Message}");
             }
 
             Console.WriteLine("\nAppuyez sur une touche pour continuer...");

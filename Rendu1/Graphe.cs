@@ -65,19 +65,19 @@ namespace Rendu1
             MatriceAdjacence = new bool[taille, taille];
             MatricePoids = new double[taille, taille];
             
-            // Initialisation de la matrice de poids avec des valeurs infinies
+            /// Initialisation de la matrice de poids avec des valeurs infinies
             for (int i = 0; i < taille; i++)
             {
                 for (int j = 0; j < taille; j++)
                 {
                     if (i == j)
-                        MatricePoids[i, j] = 0; // La distance d'un noeud à lui-même est 0
+                        MatricePoids[i, j] = 0; /// La distance d'un noeud à lui-même est 0
                     else
                         MatricePoids[i, j] = double.PositiveInfinity; // Distance infinie par défaut
                 }
             }
             
-            // Mise à jour des liens existants
+            /// Mise à jour des liens existants
             foreach (var lien in Liens)
             {
                 int sourceIndex = Noeuds.IndexOf(lien.Source);
@@ -97,10 +97,14 @@ namespace Rendu1
             }
         }
         
-        // Temps de correspondance pour un changement de ligne (en minutes)
+        /// <summary>
+        /// Temps de correspondance pour un changement de ligne (en minutes)
+        /// </summary>
         public double TempsChangementLigne = 4.0;
 
-        // Temps entre deux stations adjacentes (en minutes)
+        /// <summary>
+        /// Temps entre deux stations adjacentes (en minutes)
+        /// </summary>
         public double TempsEntreStations = 2.0;
         
         /// <summary>
@@ -127,7 +131,7 @@ namespace Rendu1
             if (Noeuds.Count == 0)
                 return true;
                 
-            // Utiliser un parcours en largeur depuis le premier noeud
+            /// Utiliser un parcours en largeur depuis le premier noeud
             var visites = new HashSet<int>();
             var fileAttente = new Queue<Noeud<T>>();
             
@@ -152,7 +156,7 @@ namespace Rendu1
                 }
             }
             
-            // Le graphe est connexe si tous les noeuds ont été visités
+            /// Le graphe est connexe si tous les noeuds ont été visités
             return visites.Count == Noeuds.Count;
         }
         
@@ -164,13 +168,13 @@ namespace Rendu1
             if (Noeuds.Count <= 1)
                 return false;
                 
-            // Pour un graphe non orienté, on utilise une approche différente
+            /// Pour un graphe non orienté, on utilise une approche différente
             if (!EstOriente)
             {
                 return ContientCyclesNonOriente();
             }
             
-            // Pour un graphe orienté, on utilise la détection de cycle par DFS
+            /// Pour un graphe orienté, on utilise la détection de cycle par DFS
             var visites = new Dictionary<int, bool>();
             var enTraitement = new Dictionary<int, bool>();
             
@@ -197,32 +201,32 @@ namespace Rendu1
         /// </summary>
         private bool DetecterCycleRec(int noeudId, Dictionary<int, bool> visites, Dictionary<int, bool> enTraitement)
         {
-            // Marquer le noeud comme visité et en cours de traitement
+            /// Marquer le noeud comme visité et en cours de traitement
             visites[noeudId] = true;
             enTraitement[noeudId] = true;
             
-            // Trouver le noeud correspondant à l'ID
+            /// Trouver le noeud correspondant à l'ID
             var noeud = Noeuds.FirstOrDefault(n => n.Id == noeudId);
             if (noeud == null)
                 return false;
                 
-            // Vérifier tous les voisins
+            /// Vérifier tous les voisins
             foreach (var voisin in noeud.Voisins)
             {
-                // Si le voisin n'est pas visité, vérifier récursivement
+                /// Si le voisin n'est pas visité, vérifier récursivement
                 if (!visites[voisin.Id])
                 {
                     if (DetecterCycleRec(voisin.Id, visites, enTraitement))
                         return true;
                 }
-                // Si le voisin est en cours de traitement, un cycle est détecté
+                /// Si le voisin est en cours de traitement, un cycle est détecté
                 else if (enTraitement[voisin.Id])
                 {
                     return true;
                 }
             }
             
-            // Marquer le noeud comme plus en cours de traitement
+            /// Marquer le noeud comme plus en cours de traitement
             enTraitement[noeudId] = false;
             
             return false;
@@ -233,19 +237,19 @@ namespace Rendu1
         /// </summary>
         private bool ContientCyclesNonOriente()
         {
-            // Pour un graphe non orienté, on utilise un parcours en profondeur modifié
+            /// Pour un graphe non orienté, on utilise un parcours en profondeur modifié
             var visites = new Dictionary<int, bool>();
             foreach (var noeud in Noeuds)
             {
                 visites[noeud.Id] = false;
             }
             
-            // Vérifier chaque noeud non visité
+            /// Vérifier chaque noeud non visité
             foreach (var noeud in Noeuds)
             {
                 if (!visites[noeud.Id])
                 {
-                    // Utiliser -1 comme parent pour le premier noeud de chaque composante connexe
+                    /// Utiliser -1 comme parent pour le premier noeud de chaque composante connexe
                     if (DetecterCycleNonOriente(noeud.Id, visites, -1))
                         return true;
                 }
@@ -259,26 +263,26 @@ namespace Rendu1
         /// </summary>
         private bool DetecterCycleNonOriente(int noeudId, Dictionary<int, bool> visites, int parent)
         {
-            // Marquer le noeud actuel comme visité
+            /// Marquer le noeud actuel comme visité
             visites[noeudId] = true;
             
-            // Trouver le noeud correspondant à l'ID
+            /// Trouver le noeud correspondant à l'ID
             var noeud = Noeuds.FirstOrDefault(n => n.Id == noeudId);
             if (noeud == null)
                 return false;
                 
-            // Parcourir tous les voisins
+            /// Parcourir tous les voisins
             foreach (var voisin in noeud.Voisins)
             {
-                // Si le voisin n'est pas visité, vérifier récursivement
+                /// Si le voisin n'est pas visité, vérifier récursivement
                 if (!visites[voisin.Id])
                 {
                     if (DetecterCycleNonOriente(voisin.Id, visites, noeudId))
                         return true;
                 }
-                // Si le voisin est déjà visité et n'est pas le parent direct
-                // (ce qui signifierait simplement qu'on revient sur nos pas dans un graphe non orienté),
-                // alors un cycle est détecté
+                /// Si le voisin est déjà visité et n'est pas le parent direct
+                /// (ce qui signifierait simplement qu'on revient sur nos pas dans un graphe non orienté),
+                /// alors un cycle est détecté
                 else if (voisin.Id != parent)
                 {
                     return true;
@@ -307,7 +311,7 @@ namespace Rendu1
             
             while (nonVisites.Count > 0)
             {
-                // Trouver le noeud non visité avec la plus petite distance
+                /// Trouver le noeud non visité avec la plus petite distance
                 int u = -1;
                 double minDistance = double.PositiveInfinity;
                 foreach (var noeudId in nonVisites)
@@ -319,13 +323,13 @@ namespace Rendu1
                     }
                 }
                 
-                // Si aucun chemin n'est trouvé ou si on est arrivé
+                /// Si aucun chemin n'est trouvé ou si on est arrivé
                 if (u == -1 || u == arrivee)
                     break;
                     
                 nonVisites.Remove(u);
                 
-                // Parcourir tous les liens pour trouver les voisins
+                /// Parcourir tous les liens pour trouver les voisins
                 foreach (var lien in Liens)
                 {
                     if (lien.Source.Id == u || (!EstOriente && lien.Destination.Id == u))
@@ -336,7 +340,7 @@ namespace Rendu1
                         {
                             double alt = distances[u] + lien.TempsParcours;
                             
-                            // Vérifier le changement de ligne
+                            /// Vérifier le changement de ligne
                             if (precedents[u] != -1)
                             {
                                 var noeudU = Noeuds.First(n => n.Id == u);
@@ -360,7 +364,7 @@ namespace Rendu1
                 }
             }
             
-            // Reconstruction du chemin
+            /// Reconstruction du chemin
             var chemin = new List<int>();
             double distance = distances[arrivee];
             
@@ -394,7 +398,7 @@ namespace Rendu1
                 precedents[noeud.Id] = -1;
             }
             
-            // Création d'une structure pour suivre les lignes des stations
+            /// Création d'une structure pour suivre les lignes des stations
             var ligneActuelle = new Dictionary<int, int>();
             var noeudDepart = Noeuds.FirstOrDefault(n => n.Id == depart);
             if (noeudDepart != null && noeudDepart.Donnees is Station stationDepart)
@@ -402,7 +406,7 @@ namespace Rendu1
                 ligneActuelle[depart] = stationDepart.Ligne;
             }
             
-            // Relaxation des arêtes |V|-1 fois
+            /// Relaxation des arêtes |V|-1 fois
             for (int i = 1; i < Noeuds.Count; i++)
             {
                 bool changement = false;
@@ -416,11 +420,11 @@ namespace Rendu1
                     {
                         double tempsParcours = lien.TempsParcours;
                         
-                        // Vérifier s'il y a un changement de ligne
+                        /// Vérifier s'il y a un changement de ligne
                         if (lien.Source.Donnees is Station stationSource && 
                             lien.Destination.Donnees is Station stationDestination)
                         {
-                            // Si on a déjà visité le noeud source et qu'on change de ligne
+                            /// Si on a déjà visité le noeud source et qu'on change de ligne
                             if (ligneActuelle.ContainsKey(u) && ligneActuelle[u] != stationSource.Ligne)
                             {
                                 tempsParcours += TempsChangementLigne;
@@ -434,7 +438,7 @@ namespace Rendu1
                             distances[v] = nouvelleDistance;
                             precedents[v] = u;
                             
-                            // Mise à jour de la ligne actuelle
+                            /// Mise à jour de la ligne actuelle
                             if (lien.Destination.Donnees is Station stationDest)
                             {
                                 ligneActuelle[v] = stationDest.Ligne;
@@ -445,14 +449,14 @@ namespace Rendu1
                     }
                 }
                 
-                // Si aucun changement lors de cette itération, on peut s'arrêter
+                /// Si aucun changement lors de cette itération, on peut s'arrêter
                 if (!changement)
                     break;
             }
             
-            // Vérification des cycles négatifs
+            /// Vérification des cycles négatifs
             bool cycleTrouve = false;
-            // Une dernière itération pour détecter les cycles négatifs
+            /// Une dernière itération pour détecter les cycles négatifs
             foreach (var lien in Liens)
             {
                 int u = lien.Source.Id;
@@ -462,7 +466,7 @@ namespace Rendu1
                 {
                     double tempsParcours = lien.TempsParcours;
                     
-                    // Ne pas ajouter le temps de correspondance ici car c'est déjà inclus dans les distances
+                    /// Ne pas ajouter le temps de correspondance ici car c'est déjà inclus dans les distances
                     if (distances[u] + tempsParcours < distances[v])
                     {
                         cycleTrouve = true;
@@ -473,17 +477,17 @@ namespace Rendu1
             
             if (cycleTrouve)
             {
-                // Continuer quand même au lieu de retourner une erreur
+                /// Continuer quand même au lieu de retourner une erreur
             }
             
-            // Reconstruction du chemin
+            /// Reconstruction du chemin
             var chemin = new List<int>();
             double distance = distances[arrivee];
             
             if (distance != double.PositiveInfinity)
             {
                 int courant = arrivee;
-                // Limiter la reconstruction du chemin pour éviter les boucles infinies
+                /// Limiter la reconstruction du chemin pour éviter les boucles infinies
                 int maxSteps = Noeuds.Count;
                 int steps = 0;
                 
@@ -508,7 +512,7 @@ namespace Rendu1
             double[,] dist = new double[n, n];
             int[,] succ = new int[n, n];
             
-            // Initialisation
+            /// Initialisation
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
@@ -518,7 +522,7 @@ namespace Rendu1
                 }
             }
             
-            // Initialisation avec les liens existants
+            /// Initialisation avec les liens existants
             foreach (var lien in Liens)
             {
                 int i = Noeuds.IndexOf(lien.Source);
@@ -537,7 +541,7 @@ namespace Rendu1
                 }
             }
             
-            // Algorithme de Floyd-Warshall
+            /// Algorithme de Floyd-Warshall
             for (int k = 0; k < n; k++)
             {
                 for (int i = 0; i < n; i++)
@@ -548,12 +552,12 @@ namespace Rendu1
                         {
                             double nouvelleDist = dist[i, k] + dist[k, j];
                             
-                            // Ajouter le temps de correspondance si nécessaire
+                            /// Ajouter le temps de correspondance si nécessaire
                             var noeudI = Noeuds[i];
                             var noeudK = Noeuds[k];
                             var noeudJ = Noeuds[j];
                             
-                            // Vérifier si les noeuds contiennent des objets Station
+                            /// Vérifier si les noeuds contiennent des objets Station
                             if (noeudI.Donnees is Station && noeudK.Donnees is Station)
                             {
                                 var stationI = noeudI.Donnees as Station;
@@ -622,7 +626,7 @@ namespace Rendu1
             Queue<Noeud<T>> file = new Queue<Noeud<T>>();
             List<int> visites = new List<int>();
 
-            // Vérification du noeud de départ
+            /// Vérification du noeud de départ
             Noeud<T> noeudDepart = Noeuds.FirstOrDefault(n => n.Id == depart);
             
             if (noeudDepart == null) return resultat;
@@ -653,7 +657,7 @@ namespace Rendu1
             List<int> resultat = new List<int>();
             List<int> visites = new List<int>();
             
-            // Appel récursive
+            /// Appel récursive
             DFS(depart, resultat, visites);
             
             return resultat;
@@ -667,7 +671,7 @@ namespace Rendu1
                 visites.Add(noeudId);
                 resultat.Add(noeudId);
 
-                // Vérifier si la clé existe dans le dictionnaire avant d'y accéder
+                /// Vérifier si la clé existe dans le dictionnaire avant d'y accéder
                 if (ListeAdjacence.ContainsKey(noeudId))
                 {
                     foreach (int voisinId in ListeAdjacence[noeudId])
@@ -712,7 +716,7 @@ namespace Rendu1
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine($"{station}");
                         
-                        // Calculer la distance avec la station suivante
+                        /// Calculer la distance avec la station suivante
                         if (i < chemin.Count - 1)
                         {
                             var prochainNoeud = Noeuds.FirstOrDefault(n => n.Id == chemin[i+1]);
@@ -724,7 +728,7 @@ namespace Rendu1
                                     double distance = Station.CalculerDistance(station, prochainStation);
                                     distanceTotale += distance;
                                     
-                                    // Afficher les changements de ligne
+                                    ///  Afficher les changements de ligne
                                     if (station.Ligne != prochainStation.Ligne)
                                     {
                                         Console.ForegroundColor = ConsoleColor.Yellow;

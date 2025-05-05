@@ -5,10 +5,14 @@ namespace Rendu1
 {
     public class Station
     {
-        // Numéro principal de la ligne (1, 2, 3, etc.)
+        /// <summary>
+        /// Numéro principal de la ligne (1, 2, 3, etc.)
+        /// </summary>
         public int Ligne { get; private set; }
         
-        // Nom complet de la ligne (par exemple "3bis")
+        /// <summary>
+        /// Nom complet de la ligne (par exemple "3bis")
+        /// </summary>
         public string NomLigne { get; private set; }
         
         public string Nom { get; private set; }
@@ -17,10 +21,14 @@ namespace Rendu1
         public string ArretSuivant { get; private set; }
         public string ChangementsPossibles { get; private set; }
         
-        // Identifiant unique pour chaque station: ligne_nom
+        /// <summary>
+        /// Identifiant unique pour chaque station: ligne_nom
+        /// </summary>
         public string Id { get; private set; }
         
-        // Coordonnées géographiques parsées
+        /// <summary>
+        /// Coordonnées géographiques parsées
+        /// </summary>
         public double Latitude { get; private set; }
         public double Longitude { get; private set; }
         
@@ -37,11 +45,11 @@ namespace Rendu1
             StationSuivante = stationSuivante;
             Changements = changements;
             
-            // Parse des coordonnées
+            /// Parse des coordonnées
             string[] coords = coordonnees.Split(new[] { ", " }, StringSplitOptions.None);
             if (coords.Length == 2)
             {
-                // Remplacer la virgule par un point pour les nombres décimaux
+                /// Remplacer la virgule par un point pour les nombres décimaux
                 string latStr = coords[0].Replace(',', '.');
                 string lngStr = coords[1].Replace(',', '.');
                 
@@ -63,6 +71,9 @@ namespace Rendu1
             Id = $"{nomLigne}_{nom}";
         }
         
+        /// <summary>
+        /// Parse les changements
+        /// </summary>
         private List<int> ParseChangements(string changements)
         {
             List<int> resultat = new List<int>();
@@ -81,20 +92,25 @@ namespace Rendu1
             
             return resultat;
         }
-        
+
+        /// <summary>
+        /// Parse les coordonnées
+        /// </summary>
         private void ParseCoordonnees(string coordonnees)
         {
-            // Format attendu: "48.8826, 2.3260" ou "48,8826, 2,2358"
+                /// <summary>
+            /// Format attendu: "48.8826, 2.3260" ou "48,8826, 2,2358"
+            /// </summary>
             if (!string.IsNullOrEmpty(coordonnees))
             {
                 try
                 {
-                    // Séparer les coordonnées (le séparateur entre lat et long est toujours une virgule suivie d'un espace)
+                    /// Séparer les coordonnées (le séparateur entre lat et long est toujours une virgule suivie d'un espace)
                     string[] coords = coordonnees.Split(new[] { ", " }, StringSplitOptions.None);
                     
                     if (coords.Length == 2)
                     {
-                        // Remplacer la virgule par un point pour les nombres décimaux
+                        /// Remplacer la virgule par un point pour les nombres décimaux
                         string latStr = coords[0].Replace(',', '.');
                         string lngStr = coords[1].Replace(',', '.');
                         
@@ -128,26 +144,26 @@ namespace Rendu1
             if (station1 == null || station2 == null)
                 throw new ArgumentNullException(nameof(station1), "Les stations ne peuvent pas être null");
 
-            const double RAYON_TERRE = 6371; // Rayon de la Terre en kilomètres
+            const double RAYON_TERRE = 6371; /// Rayon de la Terre en kilomètres
 
-            // Conversion des degrés en radians
+            /// Conversion des degrés en radians
             double lat1 = station1.Latitude * Math.PI / 180;
             double lon1 = station1.Longitude * Math.PI / 180;
             double lat2 = station2.Latitude * Math.PI / 180;
             double lon2 = station2.Longitude * Math.PI / 180;
 
-            // Différences de latitude et longitude
+            /// Différences de latitude et longitude
             double dLat = lat2 - lat1;
             double dLon = lon2 - lon1;
 
-            // Formule de Haversine
+            /// Formule de Haversine
             double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
                       Math.Cos(lat1) * Math.Cos(lat2) *
                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
 
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
-            // Distance en kilomètres
+            /// Distance en kilomètres
             return RAYON_TERRE * c;
         }
         
